@@ -95,9 +95,12 @@ import { CHAT_URL } from './constants';
     hideBtn('translate')
   }
 
+  var url;
+  getCurrentTab().then((tab) => { url = tab.url; });
+
   async function summarize() {
-    const tab = await getCurrentTab();
-    const url = tab.url;
+    // const tab = await getCurrentTab();
+    // const url = tab.url;
 
     resultPage('Summary');
     var content = document.getElementById('content')
@@ -112,10 +115,27 @@ import { CHAT_URL } from './constants';
     })
   }
 
+  const languageStorage = {
+    get: (cb) => {
+      chrome.storage.sync.get(['language'], (result) => {
+        cb(result.language);
+      });
+    },
+    set: (value, cb) => {
+      chrome.storage.sync.set(
+        {
+          language: value,
+        },
+        () => {
+          cb();
+        }
+      );
+    },
+  };
+
   async function translate() {
-    const tab = await getCurrentTab();
-    const url = tab.url;
-    const language = 'English'
+    // const tab = await getCurrentTab();
+    // const url = tab.url;
 
     resultPage('Translation')
     var content = document.getElementById('content');
@@ -123,12 +143,26 @@ import { CHAT_URL } from './constants';
 
     content.innerText = "Waiting for response..."
 
-    var port = chrome.runtime.connect({});
-    port.postMessage({ type: 'TRANSLATE', url: url, language: language });
-    port.onMessage.addListener(function (resp) {
-      content.innerText = resp.content
+    languageStorage.get((lang) => {
+      let language;
+      if (typeof lang === 'undefined') {
+        languageStorage.set('English', () => { });
+        language = 'English';
+      } else {
+        language = lang;
+      }
+      console.log(`language: ${language}`);
+      var port = chrome.runtime.connect({});
+      port.postMessage({ type: 'TRANSLATE', url: url, language: language });
+      port.onMessage.addListener(function (resp) {
+        content.innerText = resp.content
+      })
     })
   }
 
   document.addEventListener('DOMContentLoaded', check);
+
+  document.getElementById('settings').addEventListener('click', () => {
+    chrome.tabs.create({ url: chrome.runtime.getURL("settings.html") });
+  });
 })();

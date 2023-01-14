@@ -41,6 +41,10 @@ body {
   width: auto;
 }
 
+#settings:hover {
+  cursor: pointer;
+}
+
 section {
   height: fit-content;
   width: 384px;
@@ -80,7 +84,8 @@ section {
   user-select: none;
 }
 
-.button:focus {
+.button:focus,
+#settings_icon {
   outline: none;
 }
 
