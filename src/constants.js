@@ -15,11 +15,9 @@ const SAVESUB_ENDPOINTS = {
 
 // QUERY 
 const QUERY = `
-This is the subtitle of a Youtube video:
 {0}
-Could you summarise it in English in less than ten bullet points?
+Summarize the content from the above text in English with less than ten bullet points.
 Summary:
-1.
 `
 
 export {
