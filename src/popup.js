@@ -162,7 +162,22 @@ import { CHAT_URL } from './constants';
 
   document.addEventListener('DOMContentLoaded', check);
 
-  document.getElementById('settings').addEventListener('click', () => {
-    chrome.tabs.create({ url: chrome.runtime.getURL("settings.html") });
-  });
+  // document.getElementById('settings').addEventListener('click', () => {
+  //   chrome.tabs.create({ url: chrome.runtime.getURL("settings.html") });
+  // });
+
+  languageStorage.get((lang) => {
+    if (typeof lang === 'undefined') {
+      languageStorage.set('English', () => { });
+      document.getElementById('languages').value = 'English';
+    } else {
+      document.getElementById('languages').value = lang;
+    }
+  })
+
+  document.getElementById('languages').onchange = function () {
+    const sel = document.getElementById('languages');
+    const language = sel.options[sel.selectedIndex].value;
+    languageStorage.set(language, () => { });
+  };
 })();
