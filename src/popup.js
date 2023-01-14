@@ -1,6 +1,7 @@
 'use strict';
 
 import './popup.css';
+import CHAT_URL from './constants.js';
 
 (function () {
   // We will make use of Storage API to get and store `count` value
@@ -122,7 +123,13 @@ import './popup.css';
     var port = chrome.runtime.connect({});
     port.postMessage({ type: 'AUTHENTICATE' });
     port.onMessage.addListener(function (resp) {
-      console.log(resp.isAuthenticated);
+      console.log( `Authenticated: ${resp.isAuthenticated}`);
+      if (!resp.isAuthenticated) {
+        document.getElementById('button').innerText = 'Login';
+        document.getElementById('button').addEventListener('click', () => {
+          window.open(CHAT_URL, '_blank');
+        });
+      }
     })
   }
 
