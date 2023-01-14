@@ -103,18 +103,6 @@ import CHAT_URL from './constants.js';
       console.log('not watching YouTube video');
       document.getElementById('status').innerText = 'Cannot find YouTube Video'
     }
-
-    // Restore count value
-    // counterStorage.get((count) => {
-    //   if (typeof count === 'undefined') {
-    //     // Set counter value as 0
-    //     counterStorage.set(0, () => {
-    //       setupCounter(0);
-    //     });
-    //   } else {
-    //     setupCounter(count);
-    //   }
-    // });
   }
 
   async function checkLogin() {
@@ -123,29 +111,22 @@ import CHAT_URL from './constants.js';
     var port = chrome.runtime.connect({});
     port.postMessage({ type: 'AUTHENTICATE' });
     port.onMessage.addListener(function (resp) {
-      console.log( `Authenticated: ${resp.isAuthenticated}`);
+      console.log(`Authenticated: ${resp.isAuthenticated}`);
       if (!resp.isAuthenticated) {
-        document.getElementById('button').innerText = 'Login';
+        document.getElementById('button').value = 'Login';
         document.getElementById('button').addEventListener('click', () => {
           window.open(CHAT_URL, '_blank');
+          // chrome.tabs.create({ "url": CHAT_URL });
         });
       }
     })
   }
 
-  document.addEventListener('DOMContentLoaded', checkYouTubeVideo);
-  document.addEventListener('DOMContentLoaded', checkLogin);
+  async function check() {
+    await checkYouTubeVideo();
+    await checkLogin();
+    // TODO summarize button
+  }
 
-  // Communicate with background file by sending a message
-  // chrome.runtime.sendMessage(
-  //   {
-  //     type: 'GREETINGS',
-  //     payload: {
-  //       message: 'Hello, my name is Pop. I am from Popup.',
-  //     },
-  //   },
-  //   (response) => {
-  //     console.log(response.message);
-  //   }
-  // );
+  document.addEventListener('DOMContentLoaded', check);
 })();
