@@ -17,5 +17,9 @@
     "webpack": "^5.75.0",
     "webpack-cli": "^4.10.0",
     "webpack-merge": "^5.8.0"
+  },
+  "dependencies": {
+    "dotenv-webpack": "^8.0.1",
+    "path-browserify": "^1.0.1"
   }
 }
