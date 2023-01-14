@@ -21,7 +21,7 @@ async function summarize(req, port) {
   resp = ask(uuid, puuid, query, token)
 
   reader = resp.body.pipeThrough(new TextDecoderStream()).getReader()
-  let conversationId = undefined
+  let conversationId = null 
 
   while (True) {
     const {value, done} = await reader.read();
@@ -32,9 +32,17 @@ async function summarize(req, port) {
     if (!value.startsWith('data: ')) {
       continue
     }
-    data = JSON.parse(value.split("data: ")[1])
+    open = value.indexOf('{')
+    close = value.indexOf('}')
+    try {
+      data = JSON.parse(value.substring(open, close + 1))
+    } catch (err) {
+      port.postMessage({ type: "SUMMARY", content: "an error has occured"})
+      await removeConversation(conversationId, token)
+      port.disconnect()
+    }
     conversationId = data.conversation_id
-    port.postMessage({type: "SUMMARY", content: data.message?.content?.parts?.[0]});
+    port.postMessage({type: "SUMMARY", content: data.message?.content?.parts?.[0]})
   }
   await removeConversation(conversationId, token)
   port.disconnect()
@@ -42,7 +50,7 @@ async function summarize(req, port) {
 
 async function authenticate(port) {
   try {
-    getOpenAIToken()
+    await getOpenAIToken()
     port.postMessage({ isAuthenticated: true })
   } catch (err) {
     port.postMessage({ isAuthenticated: false })
