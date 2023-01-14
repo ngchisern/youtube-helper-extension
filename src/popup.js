@@ -39,7 +39,14 @@ import { CHAT_URL } from './constants';
         console.log(`not authenticated, opening CHAT_URL:${CHAT_URL}`);
         document.getElementById('button').innerHTML = 'Login';
         document.getElementById('button').addEventListener('click', () => {
-          window.open(CHAT_URL, '_newtab');
+          chrome.windows.create({
+            url: CHAT_URL,
+            type: "popup"
+          }, function(win) {
+            // close popup so that user needs to reopen after login
+            // so that this script reruns to check login
+            window.close();
+          });
         });
       }
     })
