@@ -13,7 +13,7 @@ async function getAccessToken() {
 }
 
 async function removeConversation(id, token) {
-  resp = await fetch(`${CHAT_URL}${CHAT_ENDPOINTS.conversation}/${id}`, {
+  return await fetch(`${CHAT_URL}${CHAT_ENDPOINTS.conversation}/${id}`, {
     method: 'PATCH',
     headers: {
       'Content-Type': 'application/json',
@@ -21,12 +21,11 @@ async function removeConversation(id, token) {
     },
     body: JSON.stringify({is_visible: false})
   })
-  
-  return resp
 }
 
 async function ask(uuid, puuid, question, token) {
-  resp = await fetch(`${CHAT_URL}${CHAT_ENDPOINTS.conversation}`, {
+  console.log(question)
+  return await fetch(`${CHAT_URL}${CHAT_ENDPOINTS.conversation}`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -38,16 +37,14 @@ async function ask(uuid, puuid, question, token) {
         id: uuid, 
         role: 'user',
         content: {
-          'content-type': 'text',
-          'parts': [question]
+          content_type: 'text',
+          parts: [question]
         }
       }],
       model: CHAT_MODEL,
       parent_message_id: puuid
     })
   })
-
-  return resp
 }
 
 export {

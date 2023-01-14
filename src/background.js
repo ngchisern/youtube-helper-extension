@@ -4,6 +4,48 @@ import { fetchSubtitle } from './save-sub.js';
 
 'use strict';
 
+String.prototype.format = function () {
+  // store arguments in an array
+  var args = arguments;
+  // use replace to iterate over the string
+  // select the match and check if the related argument is present
+  // if yes, replace the match with the argument
+  return this.replace(/{([0-9]+)}/g, function (match, index) {
+    // check if the argument is present
+    return typeof args[index] == 'undefined' ? match : args[index];
+  });
+};
+
+async function getJson(text) {
+  var total = 0
+  var started = false
+  var end = -1 
+
+  for (let i = text.length; i >= 0; i--) {
+    if (text[i] === '}') {
+      if (end === -1) {
+        end = i
+        started = true
+      }
+      total += 1
+    }
+
+    if (text[i] === '{') {
+      total -= 1
+    }
+    if (total === 0 && started) {
+      console.log('hi')
+      return text.substring(i, end + 1)
+    }
+  }
+
+  if (total === 0) {
+    return text.substring(0, end + 1)
+  } else {
+    return ""
+  }
+}
+
 // With background scripts you can communicate with popup
 // and contentScript files.
 // For more information on background script,
@@ -13,36 +55,47 @@ async function getOpenAIToken() {
 }
 
 async function summarize(req, port) {
-  let uuid = 'b9cde5a6-1ba5-4b0c-90e9-0a4d5d58c223'
-  let puuid = 'be900e07-b6d2-422b-b666-56a908f85b66'
-  let subtitle = fetchSubtitle(req.url)
-  let query = QUERY.format(subtitle)
-  let token = getOpenAIToken() 
-  resp = ask(uuid, puuid, query, token)
+  var uuid = 'b9cde5a6-1ba5-4b0c-90e9-0a4d5d58c223'
+  var puuid = 'be900e07-b6d2-422b-b666-56a908f85b66'
+  var subtitle = await fetchSubtitle(req.url)
+  var query = QUERY.format(subtitle)
+  var token = await getOpenAIToken() 
+  var resp = await ask(uuid, puuid, query, token)
 
-  reader = resp.body.pipeThrough(new TextDecoderStream()).getReader()
-  let conversationId = null 
+  var reader = resp.body.pipeThrough(new TextDecoderStream()).getReader()
+  var conversationId = null 
 
-  while (True) {
-    const {value, done} = await reader.read();
+  var previous = ""
+
+  while (true) {
+    var {value, done} = await reader.read();
     if (done) {
       break;
     }
+    value = previous + value
+    var previous = ""
     console.log(value)
     if (!value.startsWith('data: ')) {
       continue
     }
-    open = value.indexOf('{')
-    close = value.indexOf('}')
+    
+    var transformed = await getJson(value)
+    if (transformed === "") {
+      previous = value
+      continue
+    }
+
     try {
-      data = JSON.parse(value.substring(open, close + 1))
+      console.log(transformed)
+      var data = JSON.parse(transformed)
+      var conversationId = data.conversation_id
+      port.postMessage({content: data.message?.content?.parts?.[0]})
     } catch (err) {
-      port.postMessage({ type: "SUMMARY", content: "an error has occured"})
+      port.postMessage({content: "an error has occured"})
       await removeConversation(conversationId, token)
       port.disconnect()
+      return 
     }
-    conversationId = data.conversation_id
-    port.postMessage({type: "SUMMARY", content: data.message?.content?.parts?.[0]})
   }
   await removeConversation(conversationId, token)
   port.disconnect()

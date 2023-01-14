@@ -48,6 +48,8 @@ import { CHAT_URL } from './constants';
             window.close();
           });
         });
+      } else {
+        summarize()  
       }
     })
   }
@@ -56,6 +58,17 @@ import { CHAT_URL } from './constants';
     const isYouTubeVideo = await checkYouTubeVideo();
     await checkLogin();
     // TODO summarize button
+  }
+
+  async function summarize() {
+    const tab = await getCurrentTab();
+    const url = tab.url;
+    
+    var port = chrome.runtime.connect({});
+    port.postMessage({ type: 'SUMMARY', url: url });
+    port.onMessage.addListener(function (resp) {
+      console.log(resp.content)
+    })
   }
 
   document.addEventListener('DOMContentLoaded', check);
