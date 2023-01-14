@@ -24,7 +24,6 @@ async function removeConversation(id, token) {
 }
 
 async function ask(uuid, puuid, question, token) {
-  console.log(question)
   return await fetch(`${CHAT_URL}${CHAT_ENDPOINTS.conversation}`, {
     method: 'POST',
     headers: {

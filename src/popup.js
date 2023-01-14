@@ -20,38 +20,19 @@ import { CHAT_URL } from './constants';
     const tab = await getCurrentTab();
     const url = tab.url;
     isYouTubeVideo = url.startsWith('https://www.youtube.com/watch');
-    if (isYouTubeVideo) {
-      console.log('is watching YouTube video');
-      document.getElementById('status').innerText = 'Found YouTube Video'
-    } else {
+    if (!isYouTubeVideo) {
       console.log('not watching YouTube video');
-      document.getElementById('status').innerText = 'Cannot find YouTube Video'
+      document.getElementById('heading').innerText = 'Cannot find YouTube Video'
     }
   }
 
-  function setupLoginBtn() {
-    document.getElementById('button').innerHTML = 'Login';
-    document.getElementById('button').style.display = 'inline-block';
-    document.getElementById('button').addEventListener('click', () => {
-      chrome.windows.create({
-        url: CHAT_URL,
-        type: "popup"
-      }, function (win) {
-        // close popup so that user needs to reopen after login
-        // so that this script reruns to check login
-        window.close();
-      });
-    });
+  function setupBtn(id, onClick) {
+    document.getElementById(id).style.display = 'inline-block';
+    document.getElementById(id).addEventListener('click', onClick);
   }
 
-  function setupSummaryBtn() {
-    document.getElementById('button').innerHTML = 'Summarize';
-    document.getElementById('button').style.display = 'inline-block';
-    document.getElementById('button').addEventListener('click', () => {
-      // TODO summarize
-      hideButtons();
-      summarize();
-    });
+  function hideBtn(id) {
+    document.getElementById(id).style.display = 'none'
   }
 
   async function checkLogin() {
@@ -62,9 +43,9 @@ import { CHAT_URL } from './constants';
     port.onMessage.addListener(function (resp) {
       console.log(`Authenticated: ${resp.isAuthenticated}`);
       if (!resp.isAuthenticated) {
-        setupLoginBtn();
+        loginPage()
       } else if (isYouTubeVideo) {
-        setupSummaryBtn();
+        actionPage()
       } else {
         // keep button hidden
       }
@@ -76,20 +57,68 @@ import { CHAT_URL } from './constants';
     await checkLogin();
   }
 
-  async function hideButtons() {
-    document.getElementById('button').style.display = 'none'
+  async function loginPage() {
+    document.getElementById('heading').innerText = `You're not logged in!`
+    setupBtn('login',  () => {
+      chrome.windows.create({
+        url: CHAT_URL,
+        type: "popup"
+      }, function (win) {
+        // close popup so that user needs to reopen after login
+        // so that this script reruns to check login
+        window.close();
+      })
+    })
+    hideBtn('summarize')
+    hideBtn('translate')
+  }
+
+  async function actionPage() {
+    document.getElementById('heading').innerText = 'Pick an action'
+    setupBtn('summarize', () => {
+      summarize();
+    });
+    setupBtn('translate', () => {
+      translate();
+    })
+    hideBtn('login')
+  }
+
+  async function resultPage(heading) {
+    document.getElementById('heading').innerText = heading
+    hideBtn('login')
+    hideBtn('summarize')
+    hideBtn('translate')
   }
 
   async function summarize() {
     const tab = await getCurrentTab();
     const url = tab.url;
-
+    
+    resultPage('Summary');
     var subject = document.getElementById('subject')
   
     subject.innerText = "Waiting for response..."
 
     var port = chrome.runtime.connect({});
     port.postMessage({ type: 'SUMMARY', url: url });
+    port.onMessage.addListener(function (resp) {
+      subject.innerText = resp.content
+    })
+  }
+
+  async function translate() {
+    const tab = await getCurrentTab();
+    const url = tab.url;
+    const language = 'English'
+
+    resultPage('Translation')
+    var subject = document.getElementById('translate')
+
+    subject.innerText = "Waiting for response..."
+
+    var port = chrome.runtime.connect({});
+    port.postMessage({ type: 'TRANSLATE', url: url, language: language });
     port.onMessage.addListener(function (resp) {
       subject.innerText = resp.content
     })
