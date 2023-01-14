@@ -74,5 +74,16 @@ import { CHAT_URL } from './constants';
     await checkLogin();
   }
 
+  async function summarize() {
+    const tab = await getCurrentTab();
+    const url = tab.url;
+    
+    var port = chrome.runtime.connect({});
+    port.postMessage({ type: 'SUMMARY', url: url });
+    port.onMessage.addListener(function (resp) {
+      console.log(resp.content)
+    })
+  }
+
   document.addEventListener('DOMContentLoaded', check);
 })();
