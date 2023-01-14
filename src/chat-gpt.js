@@ -7,7 +7,7 @@ async function getAccessToken() {
   }
   const data = await resp.json().catch(() => ({}))
   if (!data.accessToken) {
-    throw new Error('Unauthorized')
+    throw new Error('UNAUTHORIZED')
   }
   return data.accessToken
 }
