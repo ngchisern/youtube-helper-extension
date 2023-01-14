@@ -63,7 +63,7 @@ code {
 
 .button {
   border: 0;
-  display: inline-block;
+  display: none;
   padding: 10px 20px;
   margin-right: 4px;
   margin-left: 4px;

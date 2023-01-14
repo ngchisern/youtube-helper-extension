@@ -12,20 +12,44 @@ import { CHAT_URL } from './constants';
     return tab;
   }
 
+  let isYouTubeVideo = false;
+
   async function checkYouTubeVideo() {
     // Check whether watching YouTube video
     console.log('checking YouTube Video');
     const tab = await getCurrentTab();
     const url = tab.url;
-    if (url.startsWith('https://www.youtube.com/watch')) {
+    isYouTubeVideo = url.startsWith('https://www.youtube.com/watch');
+    if (isYouTubeVideo) {
       console.log('is watching YouTube video');
       document.getElementById('status').innerText = 'Found YouTube Video'
-      return true;
     } else {
       console.log('not watching YouTube video');
       document.getElementById('status').innerText = 'Cannot find YouTube Video'
-      return false;
     }
+  }
+
+  function setupLoginBtn() {
+    document.getElementById('button').innerHTML = 'Login';
+    document.getElementById('button').style.display = 'inline-block';
+    document.getElementById('button').addEventListener('click', () => {
+      chrome.windows.create({
+        url: CHAT_URL,
+        type: "popup"
+      }, function (win) {
+        // close popup so that user needs to reopen after login
+        // so that this script reruns to check login
+        window.close();
+      });
+    });
+  }
+
+  function setupSummaryBtn() {
+    document.getElementById('button').innerHTML = 'Summarize';
+    document.getElementById('button').style.display = 'inline-block';
+    document.getElementById('button').addEventListener('click', () => {
+      // TODO summarize
+    });
   }
 
   async function checkLogin() {
@@ -36,26 +60,18 @@ import { CHAT_URL } from './constants';
     port.onMessage.addListener(function (resp) {
       console.log(`Authenticated: ${resp.isAuthenticated}`);
       if (!resp.isAuthenticated) {
-        console.log(`not authenticated, opening CHAT_URL:${CHAT_URL}`);
-        document.getElementById('button').innerHTML = 'Login';
-        document.getElementById('button').addEventListener('click', () => {
-          chrome.windows.create({
-            url: CHAT_URL,
-            type: "popup"
-          }, function(win) {
-            // close popup so that user needs to reopen after login
-            // so that this script reruns to check login
-            window.close();
-          });
-        });
+        setupLoginBtn();
+      } else if (isYouTubeVideo) {
+        setupSummaryBtn();
+      } else {
+        // keep button hidden
       }
     })
   }
 
   async function check() {
-    const isYouTubeVideo = await checkYouTubeVideo();
+    await checkYouTubeVideo();
     await checkLogin();
-    // TODO summarize button
   }
 
   document.addEventListener('DOMContentLoaded', check);
