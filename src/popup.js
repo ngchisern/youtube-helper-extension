@@ -118,6 +118,8 @@ import CHAT_URL from './constants.js';
           window.open(CHAT_URL, '_blank');
           // chrome.tabs.create({ "url": CHAT_URL });
         });
+      } else {
+        summarize()  
       }
     })
   }
@@ -126,6 +128,17 @@ import CHAT_URL from './constants.js';
     await checkYouTubeVideo();
     await checkLogin();
     // TODO summarize button
+  }
+
+  async function summarize() {
+    const tab = await getCurrentTab();
+    const url = tab.url;
+    
+    var port = chrome.runtime.connect({});
+    port.postMessage({ type: 'SUMMARY', url: url });
+    port.onMessage.addListener(function (resp) {
+      console.log(resp.content)
+    })
   }
 
   document.addEventListener('DOMContentLoaded', check);

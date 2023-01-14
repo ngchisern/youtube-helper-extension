@@ -15,8 +15,8 @@ const SAVESUB_ENDPOINTS = {
 
 // QUERY 
 const QUERY = `
-{0}
-Summarize the content from the above text in English with less than ten bullet points.
+Summarize the content from the below text in English with less than ten bullet points.
+"{0}"
 Summary:
 `
 
