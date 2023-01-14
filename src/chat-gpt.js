@@ -1,4 +1,4 @@
-import { CHAT_END_POINTS as CHAT_ENDPOINTS, CHAT_MODEL, CHAT_URL } from "./constants"
+import { CHAT_ENDPOINTS, CHAT_MODEL, CHAT_URL } from "./constants"
 
 async function getAccessToken() {
   const resp = await fetch(`${CHAT_URL}${CHAT_ENDPOINTS.auth}`)
