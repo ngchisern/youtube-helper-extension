@@ -14,10 +14,15 @@ const SAVESUB_ENDPOINTS = {
 }
 
 // QUERY 
-const QUERY = `
+const SUMMARY_QUERY = `
 Summarize the content from the below text in English with less than ten bullet points.
 "{0}"
 Summary:
+`
+const TRANSLATE_QUERY = `
+Translate the following sentences into "{0}" text:
+"{1}"
+Translation:
 `
 
 export {
@@ -26,5 +31,6 @@ export {
   CHAT_MODEL,
   SAVESUB_URL,
   SAVESUB_ENDPOINTS,
-  QUERY
+  SUMMARY_QUERY,
+  TRANSLATE_QUERY
 }

@@ -1,5 +1,5 @@
 import { ask, getAccessToken, removeConversation  } from './chat-gpt.js'
-import { QUERY } from './constants.js';
+import { SUMMARY_QUERY, TRANSLATE_QUERY } from './constants.js';
 import { fetchSubtitle } from './save-sub.js';
 
 'use strict';
@@ -54,17 +54,14 @@ async function getOpenAIToken() {
   return getAccessToken()
 }
 
-async function summarize(req, port) {
-  var uuid = 'b9cde5a6-1ba5-4b0c-90e9-0a4d5d58c223'
-  var puuid = 'be900e07-b6d2-422b-b666-56a908f85b66'
-  var subtitle = await fetchSubtitle(req.url)
-  var query = QUERY.format(subtitle)
+async function askChatGPT(query, port) {
+  var uuid = 'b9cde5a6-1ba5-4b0c-90e9-0a4d5d58c223' // to change 
+  var puuid = 'be900e07-b6d2-422b-b666-56a908f85b66' // to change
   var token = await getOpenAIToken() 
   var resp = await ask(uuid, puuid, query, token)
 
   var reader = resp.body.pipeThrough(new TextDecoderStream()).getReader()
   var conversationId = null 
-
   var previous = ""
 
   while (true) {
@@ -74,7 +71,6 @@ async function summarize(req, port) {
     }
     value = previous + value
     var previous = ""
-    console.log(value)
     if (!value.startsWith('data: ')) {
       continue
     }
@@ -101,6 +97,18 @@ async function summarize(req, port) {
   port.disconnect()
 }
 
+async function summarize(req, port) {
+  var subtitle = await fetchSubtitle(req.url)
+  var query = SUMMARY_QUERY.format(subtitle)
+  askChatGPT(query, port) 
+}
+
+async function translate(req, port) {
+  var subtitle = await fetchSubtitle(req.url)
+  var query = TRANSLATE_QUERY.format(req.language, subtitle)
+  askChatGPT(query, port)
+}
+
 async function authenticate(port) {
   try {
     await getOpenAIToken()
@@ -116,6 +124,8 @@ chrome.runtime.onConnect.addListener(function(port) {
   port.onMessage.addListener(async function(req) {
     if (req.type === "SUMMARY") {
       summarize(req, port) 
+    } else if (req.type === "TRANSLATE") {
+      translate(req, port)
     } else if (req.type === "AUTHENTICATE") {
       authenticate(port) 
     }
