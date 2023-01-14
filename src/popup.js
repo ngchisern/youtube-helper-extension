@@ -10,103 +10,135 @@ import './popup.css';
   // To get storage access, we have to mention it in `permissions` property of manifest.json file
   // More information on Permissions can we found at
   // https://developer.chrome.com/extensions/declare_permissions
-  const counterStorage = {
-    get: (cb) => {
-      chrome.storage.sync.get(['count'], (result) => {
-        cb(result.count);
-      });
-    },
-    set: (value, cb) => {
-      chrome.storage.sync.set(
-        {
-          count: value,
-        },
-        () => {
-          cb();
-        }
-      );
-    },
-  };
+  // const counterStorage = {
+  //   get: (cb) => {
+  //     chrome.storage.sync.get(['count'], (result) => {
+  //       cb(result.count);
+  //     });
+  //   },
+  //   set: (value, cb) => {
+  //     chrome.storage.sync.set(
+  //       {
+  //         count: value,
+  //       },
+  //       () => {
+  //         cb();
+  //       }
+  //     );
+  //   },
+  // };
 
-  function setupCounter(initialValue = 0) {
-    document.getElementById('counter').innerHTML = initialValue;
+  // function setupCounter(initialValue = 0) {
+  //   document.getElementById('counter').innerHTML = initialValue;
 
-    document.getElementById('incrementBtn').addEventListener('click', () => {
-      updateCounter({
-        type: 'INCREMENT',
-      });
-    });
+  //   document.getElementById('incrementBtn').addEventListener('click', () => {
+  //     updateCounter({
+  //       type: 'INCREMENT',
+  //     });
+  //   });
 
-    document.getElementById('decrementBtn').addEventListener('click', () => {
-      updateCounter({
-        type: 'DECREMENT',
-      });
-    });
+  //   document.getElementById('decrementBtn').addEventListener('click', () => {
+  //     updateCounter({
+  //       type: 'DECREMENT',
+  //     });
+  //   });
+  // }
+
+  // function updateCounter({ type }) {
+  //   counterStorage.get((count) => {
+  //     let newCount;
+
+  //     if (type === 'INCREMENT') {
+  //       newCount = count + 1;
+  //     } else if (type === 'DECREMENT') {
+  //       newCount = count - 1;
+  //     } else {
+  //       newCount = count;
+  //     }
+
+  //     counterStorage.set(newCount, () => {
+  //       document.getElementById('counter').innerHTML = newCount;
+
+  //       // Communicate with content script of
+  //       // active tab by sending a message
+  //       chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+  //         const tab = tabs[0];
+
+  //         chrome.tabs.sendMessage(
+  //           tab.id,
+  //           {
+  //             type: 'COUNT',
+  //             payload: {
+  //               count: newCount,
+  //             },
+  //           },
+  //           (response) => {
+  //             console.log('Current count value passed to contentScript file');
+  //           }
+  //         );
+  //       });
+  //     });
+  //   });
+  // }
+
+  // https://developer.chrome.com/docs/extensions/reference/tabs/#get-the-current-tab
+  async function getCurrentTab() {
+    let queryOptions = { active: true, lastFocusedWindow: true };
+    // `tab` will either be a `tabs.Tab` instance or `undefined`.
+    let [tab] = await chrome.tabs.query(queryOptions);
+    return tab;
   }
 
-  function updateCounter({ type }) {
-    counterStorage.get((count) => {
-      let newCount;
+  async function checkYouTubeVideo() {
+    // Check whether watching YouTube video
+    console.log('checking YouTube Video');
+    const queryOptions = { active: true, lastFocusedWindow: true };
+    const tab = await getCurrentTab();
+    const url = tab.url;
+    if (url.startsWith('https://www.youtube.com/watch')) {
+      console.log('is watching YouTube video');
+      document.getElementById('status').innerText = 'Found YouTube Video'
+    } else {
+      console.log('not watching YouTube video');
+      document.getElementById('status').innerText = 'Cannot find YouTube Video'
+    }
 
-      if (type === 'INCREMENT') {
-        newCount = count + 1;
-      } else if (type === 'DECREMENT') {
-        newCount = count - 1;
-      } else {
-        newCount = count;
-      }
-
-      counterStorage.set(newCount, () => {
-        document.getElementById('counter').innerHTML = newCount;
-
-        // Communicate with content script of
-        // active tab by sending a message
-        chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-          const tab = tabs[0];
-
-          chrome.tabs.sendMessage(
-            tab.id,
-            {
-              type: 'COUNT',
-              payload: {
-                count: newCount,
-              },
-            },
-            (response) => {
-              console.log('Current count value passed to contentScript file');
-            }
-          );
-        });
-      });
-    });
-  }
-
-  function restoreCounter() {
     // Restore count value
-    counterStorage.get((count) => {
-      if (typeof count === 'undefined') {
-        // Set counter value as 0
-        counterStorage.set(0, () => {
-          setupCounter(0);
-        });
-      } else {
-        setupCounter(count);
-      }
-    });
+    // counterStorage.get((count) => {
+    //   if (typeof count === 'undefined') {
+    //     // Set counter value as 0
+    //     counterStorage.set(0, () => {
+    //       setupCounter(0);
+    //     });
+    //   } else {
+    //     setupCounter(count);
+    //   }
+    // });
   }
 
-  document.addEventListener('DOMContentLoaded', restoreCounter);
+  async function checkLogin() {
+    console.log('checking login');
+    // Check whether already login to OpenAI
+    var port = chrome.runtime.connect({});
+    port.postMessage({ type: 'AUTHENTICATE' });
+    port.onMessage.addListener(function (resp) {
+      console.log(resp.isAuthenticated);
+    })
+  }
+
+  document.addEventListener('DOMContentLoaded', checkYouTubeVideo);
+  document.addEventListener('DOMContentLoaded', checkLogin);
 
   // Communicate with background file by sending a message
-  chrome.runtime.sendMessage(
-    {
-      type: 'GREETINGS',
-      payload: {
-        message: 'Hello, my name is Pop. I am from Popup.',
-      },
-    },
-    (response) => {
-      console.log(response.message);
-    }
-  );
+  // chrome.runtime.sendMessage(
+  //   {
+  //     type: 'GREETINGS',
+  //     payload: {
+  //       message: 'Hello, my name is Pop. I am from Popup.',
+  //     },
+  //   },
+  //   (response) => {
+  //     console.log(response.message);
+  //   }
+  // );
 })();
