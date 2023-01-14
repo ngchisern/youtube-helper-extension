@@ -1,23 +1,32 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <title>Youtube Helper</title>
-    <link rel="stylesheet" href="popup.css" />
-  </head>
-  <body>
-    <div class="logo">
-      <p class="name">Youtube Helper</p>
+
+<head>
+  <meta charset="UTF-8" />
+  <title>Youtube Helper</title>
+  <link rel="stylesheet" href="popup.css" />
+</head>
+
+<body>
+  <div id="wrapper">
+    <div>
+      <div id="titlebar" dir="ltr">
+        <img class="logo" src="icons/banner.png" alt="YouTube Helper logo">
+      </div>
+      <section id="upper_section" class="section">
+        <h2 id="heading">Checking status...</h2>
+        <div id="btn_row">
+          <button type="button" tabindex="0" id="login" class="button">Login</button>
+          <button type="button" tabindex="0" id="summarize" class="button">Summarize</button>
+          <button type="button" tabindex="0" id="translate" class="button">Translate</button>
+        </div>
+      </section>
+      <section id="content_section" class="section">
+        <p id="content" class="content"></p>
+      </section>
     </div>
-    <div class="tdiv">
-      <p id="heading" class="title">Checking status...</p>
-    </div>
-    <div class="app">
-      <button id="login" class="button">Login</button>
-      <button id="summarize" class="button">Summarize</button>
-      <button id="translate" class="button">Translate</button>
-      <p id="subject"></p>
-    </div>
-    <script src="popup.js"></script>
-  </body>
+  </div>
+  <script src="popup.js"></script>
+</body>
+
 </html>

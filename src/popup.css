@@ -6,6 +6,7 @@
   padding: 0;
   box-sizing: border-box;
 }
+
 /* normalize css ends here */
 
 html {
@@ -15,75 +16,59 @@ html {
 }
 
 body {
-  width: 350px;
-  height: 300px;
-  background-color: #EEEEEE;
+  margin: 0;
+  font-size: 16px;
+  background-color: #f4f4f4;
+  overflow: hidden;
+}
+
+#wrapper {
+  font-size: 15px;
+  margin: 0px 0px 16px 0px;
+  width: 400px;
+  max-height: 600px;
+}
+
+#titlebar {
+  margin: 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .logo {
-  height: 20;
-  display: flex;
-  align-times: center;
-  padding: 20px;
+  height: 32px;
+  width: auto;
 }
 
-.name {
-  font-size: 24px;
-  font-weight: 600px;
-  color: #333333;
+.section {
+  height: fit-content;
+  width: 384px;
+  background-color: #ffffff;
+  margin: 8px;
+  padding: 8px;
+  border-radius: 4px;
 }
 
-.tdiv {
-  height: 10%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  padding: 10px;
-  color: #FFFFFF;
-}
-
-.title {
+#heading {
   font-size: 18px;
-  font-weight: 600;
-  margin-bottom: 10px;
-  color: #333333;
-}
-
-.app {
-  height: 80%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  text-align: center;
-  padding: 20px;
-}
-
-.subtitle {
-  font-size: 12px;
-}
-
-code {
-  font-size: 12px;
-  font-family: inherit;
-  background-color: rgba(254, 237, 185, 0.3);
-  padding: 2px 4px;
-  border-radius: 2px;
-}
-
-.counter-label {
-  font-size: 12px;
-  margin-bottom: 5px;
-}
-
-.counter {
-  font-size: 36px;
   font-weight: 700;
+  justify-content: center;
+  margin-left: 8px;
+  overflow-wrap: anywhere;
 }
 
-.button-container {
-  margin-top: 15px;
+.separator {
+  height: 1px;
+  background-color: #ffffff;
+  opacity: 0.5;
+  margin: 0px;
+}
+
+#btn_row {
+  display: none;
+  padding-top: 8px;
+  padding-bottom: 8px;
 }
 
 .button {
@@ -110,9 +95,10 @@ code {
   transform: scale(1.1);
 }
 
-.divider {
-  margin: 30px auto 25px;
-  width: 50px;
-  border: 0.5px dashed #000;
-  opacity: 0.8;
+#content_section {
+  display: none;
+}
+
+.content {
+  margin: 8px;
 }

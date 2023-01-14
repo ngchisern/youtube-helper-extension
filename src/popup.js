@@ -27,6 +27,7 @@ import { CHAT_URL } from './constants';
   }
 
   function setupBtn(id, onClick) {
+    document.getElementById('btn_row').style.display = 'block';
     document.getElementById(id).style.display = 'inline-block';
     document.getElementById(id).addEventListener('click', onClick);
   }
@@ -86,6 +87,8 @@ import { CHAT_URL } from './constants';
 
   async function resultPage(heading) {
     document.getElementById('heading').innerText = heading
+    document.getElementById('btn_row').style.display = 'none';
+    document.getElementById('content_section').style.display = 'block';
     hideBtn('login')
     hideBtn('summarize')
     hideBtn('translate')
@@ -96,14 +99,15 @@ import { CHAT_URL } from './constants';
     const url = tab.url;
     
     resultPage('Summary');
-    var subject = document.getElementById('subject')
+    var content = document.getElementById('content')
+    content.style.textAlign = "left";
   
-    subject.innerText = "Waiting for response..."
+    content.innerText = "Waiting for response..."
 
     var port = chrome.runtime.connect({});
     port.postMessage({ type: 'SUMMARY', url: url });
     port.onMessage.addListener(function (resp) {
-      subject.innerText = resp.content
+      content.innerText = resp.content
     })
   }
 
@@ -113,14 +117,15 @@ import { CHAT_URL } from './constants';
     const language = 'English'
 
     resultPage('Translation')
-    var subject = document.getElementById('translate')
+    var content = document.getElementById('content');
+    content.style.textAlign = "center";
 
-    subject.innerText = "Waiting for response..."
+    content.innerText = "Waiting for response..."
 
     var port = chrome.runtime.connect({});
     port.postMessage({ type: 'TRANSLATE', url: url, language: language });
     port.onMessage.addListener(function (resp) {
-      subject.innerText = resp.content
+      content.innerText = resp.content
     })
   }
 
