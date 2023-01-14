@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
-  "name": "Youtube Helper Extension",
-  "version": "0.1.0",
-  "description": "My Chrome Extension",
+  "name": "Youtube Helper",
+  "version": "0.0.1",
+  "description": "",
   "icons": {
     "16": "icons/icon_16.png",
     "32": "icons/icon_32.png",
@@ -16,13 +16,17 @@
     "default_title": "Youtube Helper Extension",
     "default_popup": "popup.html"
   },
+  "host_permissions": [
+    "<all_urls>"
+  ],
   "permissions": [
-    "storage"
+    "storage",
+    "tabs"
   ],
   "content_scripts": [
     {
       "matches": [
-        "<all_urls>"
+        "https://www.youtube.com/watch*"
       ],
       "run_at": "document_idle",
       "js": [
