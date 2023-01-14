@@ -49,6 +49,8 @@ import { CHAT_URL } from './constants';
     document.getElementById('button').style.display = 'inline-block';
     document.getElementById('button').addEventListener('click', () => {
       // TODO summarize
+      hideButtons();
+      summarize();
     });
   }
 
@@ -74,14 +76,22 @@ import { CHAT_URL } from './constants';
     await checkLogin();
   }
 
+  async function hideButtons() {
+    document.getElementById('button').style.display = 'none'
+  }
+
   async function summarize() {
     const tab = await getCurrentTab();
     const url = tab.url;
-    
+
+    var subject = document.getElementById('subject')
+  
+    subject.innerText = "Waiting for response..."
+
     var port = chrome.runtime.connect({});
     port.postMessage({ type: 'SUMMARY', url: url });
     port.onMessage.addListener(function (resp) {
-      console.log(resp.content)
+      subject.innerText = resp.content
     })
   }
 
