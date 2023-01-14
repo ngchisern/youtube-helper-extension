@@ -23,6 +23,7 @@ import { CHAT_URL } from './constants';
     if (!isYouTubeVideo) {
       console.log('not watching YouTube video');
       document.getElementById('heading').innerText = 'Cannot find YouTube Video'
+      document.getElementById('not_found_section').style.display = 'block';
     }
   }
 
@@ -60,7 +61,7 @@ import { CHAT_URL } from './constants';
 
   async function loginPage() {
     document.getElementById('heading').innerText = `You're not logged in!`
-    setupBtn('login',  () => {
+    setupBtn('login', () => {
       chrome.windows.create({
         url: CHAT_URL,
         type: "popup"
@@ -97,11 +98,11 @@ import { CHAT_URL } from './constants';
   async function summarize() {
     const tab = await getCurrentTab();
     const url = tab.url;
-    
+
     resultPage('Summary');
     var content = document.getElementById('content')
     content.style.textAlign = "left";
-  
+
     content.innerText = "Waiting for response..."
 
     var port = chrome.runtime.connect({});

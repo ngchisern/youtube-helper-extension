@@ -41,7 +41,7 @@ body {
   width: auto;
 }
 
-.section {
+section {
   height: fit-content;
   width: 384px;
   background-color: #ffffff;
@@ -56,13 +56,6 @@ body {
   justify-content: center;
   margin-left: 8px;
   overflow-wrap: anywhere;
-}
-
-.separator {
-  height: 1px;
-  background-color: #ffffff;
-  opacity: 0.5;
-  margin: 0px;
 }
 
 #btn_row {
@@ -101,4 +94,13 @@ body {
 
 .content {
   margin: 8px;
+}
+
+#not_found_section {
+  display: none;
+  text-align: center;
+}
+
+#not_found_icon {
+  width: 300px;
 }
