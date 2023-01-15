@@ -1,12 +1,19 @@
 # <img src="public/icons/logo.png" width="45" align="left"> Youtube Helper Extension
 
-![Example](https://user-images.githubusercontent.com/64767959/212521125-24274752-29c4-4bef-a53e-0dd94521781e.gif)
-
 Summarizes and translates YouTube videos with the specified language
 
-## Install
+![Example](https://user-images.githubusercontent.com/64767959/212521125-24274752-29c4-4bef-a53e-0dd94521781e.gif)
 
-[**Chrome** extension]() <!-- TODO: Add chrome extension link inside parenthesis -->
+
+## What it does
+
+YouTube Helper is a tool that can automatically summarize the content of a YouTube video, providing a brief summary of the main points or key takeaways. The summary would be in the form of text shown in the extension popup. It can also automatically translate the spoken or written text in a YouTube video from one language to another. 
+
+
+## How we built it
+
+We develop the YouTube Helper using common web technologies such HTML, CSS and NodeJS. We also used the Chrome Extensions API to interact with the browser. In addition, we used Savesubs and ChatGPT to obtain the transcript and summarize/translate the content.
+
 
 ## Contribution
 
@@ -15,4 +22,6 @@ Suggestions and pull requests are welcomed!.
 ---
 
 This project was bootstrapped with [Chrome Extension CLI](https://github.com/dutiyesh/chrome-extension-cli)
+
+This project was built on top of [Savesubs](https://savesubs.com/) and [ChatGPT](https://openai.com/blog/chatgpt/).
 
