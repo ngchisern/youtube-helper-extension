@@ -21,7 +21,6 @@ Suggestions and pull requests are welcomed!.
 
 ---
 
-This project was bootstrapped with [Chrome Extension CLI](https://github.com/dutiyesh/chrome-extension-cli)
-
+This project was bootstrapped with [Chrome Extension CLI](https://github.com/dutiyesh/chrome-extension-cli) </br>
 This project was built on top of [Savesubs](https://savesubs.com/) and [ChatGPT](https://openai.com/blog/chatgpt/).
 
