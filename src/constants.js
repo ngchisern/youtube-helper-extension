@@ -22,7 +22,6 @@ Summary:
 const TRANSLATE_QUERY = `
 Translate the following text into {0}:
 "{1}"
-If the text is already in {0}, return me the same text. Translation:
 `
 
 export {
