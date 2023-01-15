@@ -1,11 +1,6 @@
-# <img src="public/icons/icon_48.png" width="45" align="left"> Youtube Helper Extension
+# <img src="public/icons/logo.png" width="45" align="left"> Youtube Helper Extension
 
-My Chrome Extension
-
-## Features
-
-- Feature 1
-- Feature 2
+Summarizes and translates YouTube videos with the specified language
 
 ## Install
 
