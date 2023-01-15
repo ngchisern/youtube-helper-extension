@@ -98,12 +98,22 @@ async function askChatGPT(query, port) {
 
 async function summarize(req, port) {
   var subtitle = await fetchSubtitle(req.url)
+  if (subtitle == "") {
+    port.postMessage({content: "Cannot obtain video transcript."})
+    port.disconnect()
+    return;
+  }
   var query = SUMMARY_QUERY.format(req.language, subtitle)
   askChatGPT(query, port) 
 }
 
 async function translate(req, port) {
   var subtitle = await fetchSubtitle(req.url)
+  if (subtitle == "") {
+    port.postMessage({content: "Cannot obtain video transcript."})
+    port.disconnect()
+    return;
+  }
   var query = TRANSLATE_QUERY.format(req.language, subtitle)
   askChatGPT(query, port)
 }

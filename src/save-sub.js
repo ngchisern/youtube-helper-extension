@@ -17,6 +17,11 @@ async function fetchSubtitle(youtubeUrl) {
   })
 
   resp = await resp.json()
+
+  if (resp?.response?.formats == null || resp.response.formats.length == 0) {
+    return ""
+  }
+
   var path = resp.response.formats[0].url
   var params = "stripAngle=true&stripParentheses=true&stripCurly=true&stripSquare=true&stripMusicCues=true&ext=txt"
 
