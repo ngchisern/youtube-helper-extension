@@ -17,15 +17,14 @@ String.prototype.format = function () {
 };
 
 async function getJson(text) {
-  var total = 0
-  var started = false
+  var total = 500 // any number that is big enough is ok 
   var end = -1 
 
-  for (let i = text.length; i >= 0; i--) {
+  for (let i = text.length - 1; i >= 0; i--) {
     if (text[i] === '}') {
       if (end === -1) {
         end = i
-        started = true
+        total = 0
       }
       total += 1
     }
@@ -33,8 +32,7 @@ async function getJson(text) {
     if (text[i] === '{') {
       total -= 1
     }
-    if (total === 0 && started) {
-      console.log('hi')
+    if (total === 0) {
       return text.substring(i, end + 1)
     }
   }
@@ -82,11 +80,12 @@ async function askChatGPT(query, port) {
     }
 
     try {
-      console.log(transformed)
       var data = JSON.parse(transformed)
       var conversationId = data.conversation_id
       port.postMessage({content: data.message?.content?.parts?.[0]})
     } catch (err) {
+      console.log(value)
+      console.log(transformed)
       port.postMessage({content: "an error has occured"})
       await removeConversation(conversationId, token)
       port.disconnect()
