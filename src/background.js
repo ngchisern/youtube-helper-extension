@@ -98,7 +98,7 @@ async function askChatGPT(query, port) {
 
 async function summarize(req, port) {
   var subtitle = await fetchSubtitle(req.url)
-  var query = SUMMARY_QUERY.format(subtitle)
+  var query = SUMMARY_QUERY.format(req.language, subtitle)
   askChatGPT(query, port) 
 }
 

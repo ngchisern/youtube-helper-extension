@@ -15,14 +15,14 @@ const SAVESUB_ENDPOINTS = {
 
 // QUERY 
 const SUMMARY_QUERY = `
-Summarize the content from the below text in English with less than ten bullet points.
-"{0}"
+Summarize the content from the below text in {0} with less than ten bullet points.
+{1}
 Summary:
 `
 const TRANSLATE_QUERY = `
-Translate the following sentences into "{0}" text:
+Translate the following text into {0}:
 "{1}"
-Translation:
+If the text is already in {0}, return me the same text. Translation:
 `
 
 export {

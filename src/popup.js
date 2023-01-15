@@ -107,11 +107,22 @@ import { CHAT_URL } from './constants';
     content.style.textAlign = "left";
 
     content.innerText = "Waiting for response..."
+    
+    languageStorage.get((lang) => {
+      let language;
+      if (typeof lang === 'undefined') {
+        languageStorage.set('English', () => { });
+        language = 'English';
+      } else {
+        language = lang;
+      }
+      console.log(`language: ${language}`);
+      var port = chrome.runtime.connect({});
+      port.postMessage({ type: 'SUMMARY', url: url, language: language });
+      port.onMessage.addListener(function (resp) {
+        content.innerText = resp.content
+      })
 
-    var port = chrome.runtime.connect({});
-    port.postMessage({ type: 'SUMMARY', url: url });
-    port.onMessage.addListener(function (resp) {
-      content.innerText = resp.content
     })
   }
 
