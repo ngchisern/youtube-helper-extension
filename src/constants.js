@@ -17,7 +17,6 @@ const SAVESUB_ENDPOINTS = {
 const SUMMARY_QUERY = `
 Summarize the content from the below text in {0} with less than ten bullet points.
 {1}
-Summary:
 `
 const TRANSLATE_QUERY = `
 Translate the following text into {0}:
