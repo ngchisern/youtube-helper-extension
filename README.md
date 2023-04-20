@@ -15,6 +15,11 @@ YouTube Helper is a tool that can automatically summarize the content of a YouTu
 We develop the YouTube Helper using common web technologies such HTML, CSS and NodeJS. We also used the Chrome Extensions API to interact with the browser. Then, we incorporated ChatGPT to offer content summaries and translations.
 
 
+## Limitations
+* Does not handle the scenario where the maximum response character limit is reached.
+* Users do not have an option to stop generating responses.
+
+
 ## Contribution
 
 Suggestions and pull requests are welcomed!.
