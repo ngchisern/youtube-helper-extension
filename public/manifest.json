@@ -20,9 +20,17 @@
     "<all_urls>"
   ],
   "permissions": [
+    "declarativeNetRequest",
     "storage",
     "tabs"
   ],
+  "declarative_net_request": {
+    "rule_resources": [{
+      "id": "modify_origin",
+      "enabled": true,
+      "path": "modify-origin-rules.json"
+    }]
+  },
   "content_scripts": [
     {
       "matches": [

@@ -7,19 +7,15 @@ const CHAT_ENDPOINTS = {
 }
 const CHAT_MODEL = "text-davinci-002-render"
 
-// SAVESUBS CONSTANT
-const SAVESUB_URL = "https://savesubs.com"
-const SAVESUB_ENDPOINTS = {
-  extract: "/action/extract"
-}
-
 // QUERY 
 const SUMMARY_QUERY = `
-Summarize the content from the below text in {0} with less than ten bullet points.
+I want you to act as an expert in summarizing Youtube videos from any languages to {0}. 
+Now, summarize the content from the below text in less than 10 bullet points.
 {1}
 `
 const TRANSLATE_QUERY = `
-Translate the following text into {0}:
+I want you to act as an expert in translating Youtube videos from any languages to {0}.
+Now, translate the following content:
 "{1}"
 `
 
@@ -27,8 +23,6 @@ export {
   CHAT_URL,
   CHAT_ENDPOINTS,
   CHAT_MODEL,
-  SAVESUB_URL,
-  SAVESUB_ENDPOINTS,
   SUMMARY_QUERY,
   TRANSLATE_QUERY
 }

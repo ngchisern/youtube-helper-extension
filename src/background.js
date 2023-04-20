@@ -1,6 +1,6 @@
 import { ask, getAccessToken, removeConversation  } from './chat-gpt.js'
 import { SUMMARY_QUERY, TRANSLATE_QUERY } from './constants.js';
-import { fetchSubtitle } from './save-sub.js';
+import { fetchSubtitle } from './youtube-transcript.js';
 
 'use strict';
 
@@ -82,6 +82,10 @@ async function askChatGPT(query, port) {
     try {
       var data = JSON.parse(transformed)
       var conversationId = data.conversation_id
+      var content = data.message?.content?.parts?.[0]
+      if (content === undefined) {
+        continue
+      }
       port.postMessage({content: data.message?.content?.parts?.[0]})
     } catch (err) {
       console.log(value)
