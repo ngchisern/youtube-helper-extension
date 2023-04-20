@@ -12,7 +12,7 @@ YouTube Helper is a tool that can automatically summarize the content of a YouTu
 
 ## How we built it
 
-We develop the YouTube Helper using common web technologies such HTML, CSS and NodeJS. We also used the Chrome Extensions API to interact with the browser. In addition, we used Savesubs and ChatGPT to obtain the transcript and summarize/translate the content.
+We develop the YouTube Helper using common web technologies such HTML, CSS and NodeJS. We also used the Chrome Extensions API to interact with the browser. Then, we incorporated ChatGPT to offer content summaries and translations.
 
 
 ## Contribution
@@ -22,5 +22,5 @@ Suggestions and pull requests are welcomed!.
 ---
 
 This project was bootstrapped with [Chrome Extension CLI](https://github.com/dutiyesh/chrome-extension-cli) </br>
-This project was built on top of [Savesubs](https://savesubs.com/) and [ChatGPT](https://openai.com/blog/chatgpt/).
+This project was built on top of [ChatGPT](https://openai.com/blog/chatgpt/).
 
