@@ -1,0 +1,13 @@
+[{
+  "id": 1,
+  "priority": 1,
+  "action": {
+    "type": "modifyHeaders",
+    "requestHeaders": [
+      { "header": "Origin", "operation": "remove" }
+    ]
+  },
+  "condition": {
+    "urlFilter": "youtubei"
+  }
+}]

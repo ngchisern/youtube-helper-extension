@@ -1,6 +1,6 @@
 import { ask, getAccessToken, removeConversation  } from './chat-gpt.js'
 import { SUMMARY_QUERY, TRANSLATE_QUERY } from './constants.js';
-import { fetchSubtitle } from './save-sub.js';
+import { fetchSubtitle } from './youtube-transcript.js';
 
 'use strict';
 
