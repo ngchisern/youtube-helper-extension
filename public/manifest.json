@@ -17,7 +17,8 @@
     "default_popup": "popup.html"
   },
   "host_permissions": [
-    "<all_urls>"
+    "https://www.youtube.com/*",
+    "https://chat.openai.com/*"
   ],
   "permissions": [
     "declarativeNetRequest",
